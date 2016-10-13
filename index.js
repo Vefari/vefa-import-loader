@@ -1,4 +1,5 @@
 const utils = require('loader-utils');
+const yaml = require('js-yaml');
 const path = require('path');
 const fs = require('fs');
 
@@ -38,11 +39,19 @@ module.exports = function(source){
             }
 
             // output to a "json" directory for use elsewhere
-            if (loader.json) {
-                fs.writeFileSync(
-                    `${loader.json}/${file_name}.json`, 
-                    JSON.stringify(locals[file_name])
-                );
+            if (loader.json.dir) {
+                if (!loader.json.output) {
+                    fs.writeFileSync(
+                        `${loader.json.dir}/${file_name}.json`, 
+                        JSON.stringify(locals[file_name])
+                    );
+                } 
+                else if (loader.json.output.includes(file_name)) {
+                    fs.writeFileSync(
+                        `${loader.json.dir}/${file_name}.json`, 
+                        JSON.stringify(locals[file_name])
+                    );
+                }
             }
         }
     }
