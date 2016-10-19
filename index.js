@@ -6,6 +6,9 @@ const fs = require('fs');
 module.exports = function(source){
     this.cacheable && this.cacheable();
     
+    // lets load the shared locals object
+    let locals = this.options.locals; 
+
     // get which config options to load
     let loader = utils.getLoaderConfig(this, "import");
     
@@ -14,10 +17,7 @@ module.exports = function(source){
 
     // read the data directory
     let ref = fs.readdirSync(dir);
-    
-    // lets load the shared locals object
-    let locals = this.options.locals; 
-    
+
     // parse through the data files and add them to the locals object
     for (let i = 0, len = ref.length; i < len; i++) {
         let file = ref[i];
