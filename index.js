@@ -40,6 +40,10 @@ module.exports = function(source){
 
             // output to a "json" directory for use elsewhere
             if (loader.json.dir) {
+                // create json folder if it doesn't exist
+                if (!fs.existsSync(loader.json.dir)){
+                    fs.mkdirSync(loader.json.dir);
+                }
                 if (!loader.json.output) {
                     fs.writeFileSync(
                         `${loader.json.dir}/${file_name}.json`, 
