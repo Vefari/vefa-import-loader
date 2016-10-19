@@ -1,7 +1,7 @@
 {
   "name": "vefa-import-loader",
   "description": "Generate data from yaml files to be injected into subsequent loaders",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Cobey Potter <cobey@wellfire.co> (http://wellfire.co)",
   "license": "MIT",
   "repository": {},
