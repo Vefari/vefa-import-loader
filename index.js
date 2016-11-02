@@ -61,18 +61,21 @@ module.exports = function(source){
             }
         }
 
+        // get PAGES loader info, bypass if not there
         loader = utils.getLoaderConfig(this, "pages");
         dir = loader.context;
-        ref = fs.readdirSync(dir);
-        locals.pages = {};
-        
-        for (let i = 0, len = ref.length; i < len; i++) {
-            let file = ref[i];
-            let file_name = file.split(".")[0];
-            if( file_name ){
-                let data = path.resolve(`${dir}/${file}`)
-                this.addDependency( data );
-                locals.pages[file_name] = matter(fs.readFileSync(data, 'utf8')).data;
+        if (dir) {
+            ref = fs.readdirSync(dir);
+            locals.pages = {};
+            
+            for (let i = 0, len = ref.length; i < len; i++) {
+                let file = ref[i];
+                let file_name = file.split(".")[0];
+                if( file_name ){
+                    let data = path.resolve(`${dir}/${file}`)
+                    this.addDependency( data );
+                    locals.pages[file_name] = matter(fs.readFileSync(data, 'utf8')).data;
+                }
             }
         }
 
