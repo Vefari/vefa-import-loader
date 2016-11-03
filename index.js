@@ -1,3 +1,4 @@
+'use strict'
 const path = require('path');
 const fs = require('fs');
 const utils = require('loader-utils');
