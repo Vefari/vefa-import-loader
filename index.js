@@ -9,7 +9,7 @@ module.exports = function(source){
     this.cacheable && this.cacheable();
     
     // lets load the shared locals object
-    let loader = utils.getLoaderConfig(this);
+    let loader = utils.getOptions(this);
     let locals = loader.locals; 
 
     const file_to_locals = (ref, dir) => {
@@ -65,16 +65,17 @@ module.exports = function(source){
             ref.forEach((file) => {
                 if( file.includes('yaml') ||  file.includes('yml') ){
                     let file_name = file.split(".")[0]
+                    let file_name_path = `${output.dir}/${file_name}.json`
 
                     if (!output.files) {
                         fs.writeFileSync(
-                            `${output.dir}/${file_name}.json`, 
+                            file_name_path, 
                             JSON.stringify (locals[file_name])
                         )
                     }
                     else if (output.files.includes(file_name)) {
                         fs.writeFileSync(
-                            `${output.dir}/${file_name}.json`, 
+                            file_name_path, 
                             JSON.stringify(locals[file_name])
                         );
                     }
