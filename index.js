@@ -64,20 +64,17 @@ module.exports = function(source){
 
             ref.forEach((file) => {
                 if( file.includes('yaml') ||  file.includes('yml') ){
+                    let data = path.resolve(`${dir}/${file}`)
+                    this.addDependency( data )
+                    
                     let file_name = file.split(".")[0]
                     let file_name_path = `${output.dir}/${file_name}.json`
 
-                    if (!output.files) {
+                    if (!output.files || output.files.includes (file_name) ) {
                         fs.writeFileSync(
                             file_name_path, 
                             JSON.stringify (locals[file_name])
                         )
-                    }
-                    else if (output.files.includes(file_name)) {
-                        fs.writeFileSync(
-                            file_name_path, 
-                            JSON.stringify(locals[file_name])
-                        );
                     }
                 }
             })
@@ -88,20 +85,28 @@ module.exports = function(source){
     if (!locals.load) {
         // get which config options to load
         // get the data property of that load configuration
-        let data_dir = loader.import.data ? loader.import.data : null
-        let data_ref = fs.readdirSync (data_dir)
-        file_to_locals (data_ref, data_dir)
+        if (loader.import.data) {
+            let data_dir = loader.import.data
+            let data_ref = fs.readdirSync (data_dir)
+            file_to_locals (data_ref, data_dir)
+        }
+        
         
         // get styles
-        let styles_dir = loader.import.styles ? loader.import.styles : null
-        let styles_ref = fs.readdirSync (styles_dir)
-        file_to_locals (styles_ref, styles_dir)
-        file_to_json (styles_ref, styles_dir)
+        if (loader.import.styles) {
+            let styles_dir = loader.import.styles
+            let styles_ref = fs.readdirSync (styles_dir)
+            file_to_locals (styles_ref, styles_dir)
+            file_to_json (styles_ref, styles_dir)
+        }
+        
 
         // // get PAGES loader info, bypass if not there
-        let pages_dir = (loader.import.pages) ? loader.import.pages : null
-        let pages_ref = fs.readdirSync (pages_dir)
-        pages_to_locals (pages_ref, pages_dir)
+        if (loader.import.pages) {
+            let pages_dir = loader.import.pages
+            let pages_ref = fs.readdirSync (pages_dir)
+            pages_to_locals (pages_ref, pages_dir)
+        }
 
         // trip load boolean so we don't run the loader for each source file, 
         // but only on initial compilation load
